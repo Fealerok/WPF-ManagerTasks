@@ -15,6 +15,8 @@
             <Button Content="Add Task" Margin="10" Click="AddTaskButton_Click"/>
             <Button Content="Edit Task" Margin="10" Click="EditTaskButton_Click"/>
             <Button Content="Delete Task" Margin="10" Click="DeleteTaskButton_Click"/>
+            <Button Content="Projects" Margin="10" Click="ProjectButton_Click"/>
+            <Button Content="Teams" Margin="10" Click="TeamsButton_Click"/>
         </StackPanel>
        <DataGrid x:Name="TasksGrid" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1">
     <DataGrid.Columns>

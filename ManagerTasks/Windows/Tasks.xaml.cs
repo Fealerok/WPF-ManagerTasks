@@ -57,10 +57,17 @@ namespace ManagerTasks.Windows
             var selectedTask = TasksGrid.SelectedItem as Classes.Task;
             if (selectedTask != null)
             {
-                // Пример редактирования задачи
-                selectedTask.Title = "Updated Task";
-                _database.UpdateTask(selectedTask);
-                LoadTasks(); // Обновляем список задач
+                // Открываем окно редактирования задачи
+                var edingTaskWindow = new EdingTask(selectedTask);
+                if (edingTaskWindow.ShowDialog() == true)
+                {
+                    // Если пользователь нажал "Save", обновляем список задач
+                    LoadTasks();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a task to edit.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -72,6 +79,21 @@ namespace ManagerTasks.Windows
                 _database.DeleteTask(selectedTask.Id);
                 LoadTasks(); // Обновляем список задач
             }
+        }
+
+        private void ProjectButton_Click(object sender, RoutedEventArgs e)
+        {
+            var projectWindow = new Project();
+            projectWindow.Show(); // Показываем окно Tasks
+            this.Close(); // Закрываем текущее окно Project
+        }
+
+        private void TeamsButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Открываем окно Teams
+            var teamsWindow = new Teams();
+            teamsWindow.Show(); // Показываем окно Teams
+            this.Close(); // Закрываем текущее окно Tasks
         }
     }
 }
