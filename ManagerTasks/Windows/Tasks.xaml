@@ -1,0 +1,30 @@
+﻿<Window x:Class="ManagerTasks.Windows.Tasks"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ManagerTasks.Windows"
+        mc:Ignorable="d"
+        Title="Tasks" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Button Content="Add Task" Margin="10" Click="AddTaskButton_Click"/>
+            <Button Content="Edit Task" Margin="10" Click="EditTaskButton_Click"/>
+            <Button Content="Delete Task" Margin="10" Click="DeleteTaskButton_Click"/>
+        </StackPanel>
+       <DataGrid x:Name="TasksGrid" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1">
+    <DataGrid.Columns>
+        <DataGridTextColumn Header="Title" Binding="{Binding Title}"/>
+        <DataGridTextColumn Header="Description" Binding="{Binding Description}"/>
+        <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat={}{0:yyyy-MM-dd}}"/>
+        <DataGridTextColumn Header="Status" Binding="{Binding Status.Name}"/>
+        <DataGridTextColumn Header="Assigned User" Binding="{Binding AssignedUser.Username}"/>
+        <DataGridTextColumn Header="Project" Binding="{Binding Project.Name}"/>
+    </DataGrid.Columns>
+</DataGrid>
+    </Grid>
+</Window>

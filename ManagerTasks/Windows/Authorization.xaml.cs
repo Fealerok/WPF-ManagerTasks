@@ -1,0 +1,68 @@
+﻿using ManagerTasks.Classes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace ManagerTasks.Windows
+{
+    /// <summary>
+    /// Логика взаимодействия для Authorization.xaml
+    /// </summary>
+    public partial class Authorization : Window
+    {
+
+        private Database _database;
+
+        public Authorization()
+        {
+            InitializeComponent();
+            _database = new Database();
+        }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            string username = UsernameTextBox.Text;
+            string password = PasswordBox.Password;
+
+
+            if (username == string.Empty || password == string.Empty)
+            {
+                MessageBox.Show("Введены не все данные");
+            }
+
+            else
+            {
+                var user = _database.LoginUser(username, password);
+                if (user != null)
+                {
+                    Tasks tasksWindow = new Tasks();
+                    tasksWindow.Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Неверный логин или пароль");
+                }
+            }
+
+            
+        }
+
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+            Registration registerWindow = new Registration();
+            registerWindow.Show();
+            this.Close();
+        }
+    }
+}
