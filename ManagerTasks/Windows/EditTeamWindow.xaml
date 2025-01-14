@@ -1,0 +1,43 @@
+﻿<Window x:Class="ManagerTasks.Windows.EditTeamWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ManagerTasks.Windows"
+        mc:Ignorable="d"
+        Title="Edit Team" Height="400" Width="600">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Название команды -->
+        <Label Content="Name:" Grid.Row="0" Grid.Column="0" Margin="5"/>
+        <TextBox x:Name="NameTextBox" Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Name}"/>
+
+        <!-- Список пользователей команды -->
+        <Label Content="Team Members:" Grid.Row="1" Grid.Column="0" Margin="5"/>
+        <ListBox x:Name="TeamMembersListBox" Grid.Row="1" Grid.Column="1" Margin="5" 
+                 DisplayMemberPath="Username" ItemsSource="{Binding Users}"/>
+
+        <!-- Добавление пользователя в команду -->
+        <Label Content="Add User:" Grid.Row="2" Grid.Column="0" Margin="5,32,5,152"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Margin="5,5,5,180">
+            <ComboBox x:Name="UsersComboBox" DisplayMemberPath="Username" Width="200" Margin="0,0,10,0" Height="26"/>
+            <Button Content="Add" Width="80" Click="AddUserButton_Click" Height="25"/>
+        </StackPanel>
+
+        <!-- Кнопки -->
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right">
+            <Button Content="Save" Width="80" Margin="5" Click="SaveButton_Click"/>
+            <Button Content="Cancel" Width="80" Margin="5" Click="CancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
