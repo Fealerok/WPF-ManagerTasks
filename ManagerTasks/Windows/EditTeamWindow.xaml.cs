@@ -12,7 +12,7 @@ namespace ManagerTasks.Windows
         public EditTeamWindow(Team team)
         {
             InitializeComponent();
-            _database = new Database(); // Инициализация базы данных
+            _database = Database.GetInstance();
             _team = team;
 
             // Привязка данных команды к элементам управления

@@ -26,7 +26,7 @@ namespace ManagerTasks.Windows
         public Authorization()
         {
             InitializeComponent();
-            _database = new Database();
+            _database = Database.GetInstance();
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -45,6 +45,8 @@ namespace ManagerTasks.Windows
                 var user = _database.LoginUser(username, password);
                 if (user != null)
                 {
+
+                    _database.SetUsernameForDB(username);
                     Tasks tasksWindow = new Tasks();
                     tasksWindow.Show();
                     this.Close();
@@ -62,6 +64,13 @@ namespace ManagerTasks.Windows
         {
             Registration registerWindow = new Registration();
             registerWindow.Show();
+            this.Close();
+        }
+
+        private void RecoveryButton_Click(object sender, RoutedEventArgs e)
+        {
+            Recovery RecoveryWindow = new Recovery();
+            RecoveryWindow.Show();
             this.Close();
         }
     }

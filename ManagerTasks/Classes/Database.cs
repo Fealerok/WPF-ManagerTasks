@@ -1,20 +1,34 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using ManagerTasks.Windows;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 
 namespace ManagerTasks.Classes
 {
     public class Database
     {
+        private static Database _instance;
+        public string Username;
         private string _connectionString = "Data Source=db.db";
 
-        public Database()
+        private Database()
         {
             InitializeDatabase();
+        }
+
+        public static Database GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new Database();
+            }
+
+            return _instance;
         }
 
         private void InitializeDatabase()
@@ -78,9 +92,11 @@ namespace ManagerTasks.Classes
                     StatusId INTEGER, -- Ссылка на таблицу Statuses
                     AssignedUserId INTEGER,
                     ProjectId INTEGER,
+                    TeamId INTEGER,
                     FOREIGN KEY(StatusId) REFERENCES Statuses(Id),
                     FOREIGN KEY(AssignedUserId) REFERENCES Users(Id),
-                    FOREIGN KEY(ProjectId) REFERENCES Projects(Id)
+                    FOREIGN KEY(ProjectId) REFERENCES Projects(Id),
+                    FOREIGN KEY(TeamId) REFERENCES Teams(Id)
                 );
 
                 INSERT OR IGNORE INTO Roles (Id, Name) VALUES (1, 'Администратор');
@@ -88,6 +104,27 @@ namespace ManagerTasks.Classes
             ";
                 command.ExecuteNonQuery();
             }
+        }
+
+        public string GetUserRole()
+        {
+            string role = "";
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT name FROM Roles JOIN Users ON Users.RoleId = Roles.id WHERE Users.username=@Username";
+                command.Parameters.AddWithValue("@Username", Username);
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        role = reader.GetString(0);
+                    }
+                }
+            }
+
+            return role;
         }
 
 
@@ -114,6 +151,11 @@ namespace ManagerTasks.Classes
                 }
             }
             return users;
+        }
+
+        public void SetUsernameForDB(string username)
+        {
+            Username = username;
         }
 
         public void AddTeam(Team team)
@@ -300,6 +342,27 @@ namespace ManagerTasks.Classes
             return projects;
         }
 
+        public int GetIdLoggedUser(string username)
+        {
+            int id = 0;
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT id FROM Users WHERE username=@Username";
+                command.Parameters.AddWithValue("@Username", username);
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        id = reader.GetInt32(0);
+                    }
+                }
+            }
+
+            return id;
+        }
+
 
         public List<Status> GetStatuses()
         {
@@ -326,18 +389,20 @@ namespace ManagerTasks.Classes
 
         public void AddTask(Task task)
         {
-            MessageBox.Show(task.ProjectId.ToString());
             using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "INSERT INTO Tasks (Title, Description, DueDate, StatusId, AssignedUserId, ProjectId) VALUES (@Title, @Description, @DueDate, @StatusId, @AssignedUserId, @ProjectId)";
+                command.CommandText = @"
+            INSERT INTO Tasks (Title, Description, DueDate, StatusId, AssignedUserId, ProjectId, TeamId) 
+            VALUES (@Title, @Description, @DueDate, @StatusId, @AssignedUserId, @ProjectId, @TeamId)";
                 command.Parameters.AddWithValue("@Title", task.Title);
                 command.Parameters.AddWithValue("@Description", task.Description);
                 command.Parameters.AddWithValue("@DueDate", task.DueDate.ToString("yyyy-MM-dd"));
                 command.Parameters.AddWithValue("@StatusId", task.StatusId);
-                command.Parameters.AddWithValue("@AssignedUserId", task.AssignedUserId);
+                command.Parameters.AddWithValue("@AssignedUserId", task.AssignedUserId == 0 ? (object)DBNull.Value : task.AssignedUserId);
                 command.Parameters.AddWithValue("@ProjectId", task.ProjectId == 0 ? (object)DBNull.Value : task.ProjectId);
+                command.Parameters.AddWithValue("@TeamId", task.TeamId == 0 ? (object)DBNull.Value : task.TeamId);
                 command.ExecuteNonQuery();
             }
         }
@@ -349,7 +414,13 @@ namespace ManagerTasks.Classes
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT Tasks.*, Statuses.Name as StatusName, Users.Username, Projects.Name as ProjectName FROM Tasks LEFT JOIN Statuses ON Tasks.StatusId = Statuses.Id LEFT JOIN Users ON Tasks.AssignedUserId = Users.Id LEFT JOIN Projects ON Tasks.ProjectId = Projects.Id";
+                command.CommandText = @"
+            SELECT Tasks.*, Statuses.Name as StatusName, Users.Username, Projects.Name as ProjectName, Teams.Name as TeamName 
+            FROM Tasks 
+            LEFT JOIN Statuses ON Tasks.StatusId = Statuses.Id 
+            LEFT JOIN Users ON Tasks.AssignedUserId = Users.Id 
+            LEFT JOIN Projects ON Tasks.ProjectId = Projects.Id
+            LEFT JOIN Teams ON Tasks.TeamId = Teams.Id";
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -361,11 +432,13 @@ namespace ManagerTasks.Classes
                             Description = reader.GetString(2),
                             DueDate = DateTime.Parse(reader.GetString(3)),
                             StatusId = reader.GetInt32(4),
-                            Status = new Status { Id = reader.GetInt32(4), Name = reader.GetString(7) },
+                            Status = new Status { Id = reader.GetInt32(4), Name = reader.GetString(8) },
                             AssignedUserId = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
-                            AssignedUser = reader.IsDBNull(5) ? null : new User { Username = reader.GetString(8) },
+                            AssignedUser = reader.IsDBNull(5) ? null : new User { Username = reader.GetString(9) },
                             ProjectId = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
-                            Project = reader.IsDBNull(6) ? null : new Project { Name = reader.GetString(9) }
+                            Project = reader.IsDBNull(6) ? null : new Project { Name = reader.GetString(10) },
+                            TeamId = reader.IsDBNull(7) ? 0 : reader.GetInt32(7),
+                            Team = reader.IsDBNull(11) ? null : new Team { Id = reader.GetInt32(7), Name = reader.GetString(11) }
                         });
                     }
                 }
@@ -386,7 +459,8 @@ namespace ManagerTasks.Classes
                 DueDate = @DueDate, 
                 StatusId = @StatusId, 
                 AssignedUserId = @AssignedUserId, 
-                ProjectId = @ProjectId 
+                ProjectId = @ProjectId, 
+                TeamId = @TeamId 
             WHERE Id = @Id";
                 command.Parameters.AddWithValue("@Title", task.Title);
                 command.Parameters.AddWithValue("@Description", task.Description);
@@ -394,6 +468,7 @@ namespace ManagerTasks.Classes
                 command.Parameters.AddWithValue("@StatusId", task.StatusId);
                 command.Parameters.AddWithValue("@AssignedUserId", task.AssignedUserId == 0 ? (object)DBNull.Value : task.AssignedUserId);
                 command.Parameters.AddWithValue("@ProjectId", task.ProjectId == 0 ? (object)DBNull.Value : task.ProjectId);
+                command.Parameters.AddWithValue("@TeamId", task.TeamId == 0 ? (object)DBNull.Value : task.TeamId);
                 command.Parameters.AddWithValue("@Id", task.Id);
                 command.ExecuteNonQuery();
             }
@@ -525,6 +600,198 @@ namespace ManagerTasks.Classes
                 }
             }
             return null;
+        }
+
+        public bool CheckUserData(string login, string email)
+        {
+
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = $"SELECT username FROM Users WHERE username=@Username AND email=@Email";
+                command.Parameters.AddWithValue("@Username", login);
+                command.Parameters.AddWithValue("@Email", email); // В реальном приложении пароль должен быть хэширован
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public void SetNewPassword(string password, string login)
+        {
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = $"UPDATE Users SET password=@Password WHERE username=@Username";
+                command.Parameters.AddWithValue("@Password", password);
+                command.Parameters.AddWithValue("@Username", login);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public List<User> GetUsersWithDetails()
+        {
+            var users = new List<User>();
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = @"
+            SELECT Users.*, Roles.Name as RoleName, Teams.Name as TeamName 
+            FROM Users 
+            LEFT JOIN Roles ON Users.RoleId = Roles.Id 
+            LEFT JOIN Teams ON Users.TeamId = Teams.Id";
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        users.Add(new User
+                        {
+                            Id = reader.GetInt32(0),
+                            FullName = reader.GetString(1),
+                            Email = reader.GetString(2),
+                            Username = reader.GetString(3),
+                            RoleId = reader.GetInt32(5),
+                            Role = new Role { Id = reader.GetInt32(5), Name = reader.GetString(7) },
+                            TeamId = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
+                            Team = reader.IsDBNull(6) ? null : new Team { Id = reader.GetInt32(6), Name = reader.GetString(8) }
+                        });
+                    }
+                }
+            }
+            return users;
+        }
+
+        public List<Role> GetRoles()
+        {
+            var roles = new List<Role>();
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT * FROM Roles";
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        roles.Add(new Role
+                        {
+                            Id = reader.GetInt32(0),
+                            Name = reader.GetString(1)
+                        });
+                    }
+                }
+            }
+            return roles;
+        }
+
+        public List<Team> GetTeamsForUserWindow()
+        {
+            var teams = new List<Team>();
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT * FROM Teams";
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        teams.Add(new Team
+                        {
+                            Id = reader.GetInt32(0),
+                            Name = reader.GetString(1)
+                        });
+                    }
+                }
+            }
+            return teams;
+        }
+
+        public void DeleteUser(int userId)
+        {
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+
+                // Удаляем связанные записи из TeamUsers (если есть)
+                var deleteTeamUsersCommand = connection.CreateCommand();
+                deleteTeamUsersCommand.CommandText = "DELETE FROM TeamUsers WHERE UserId = @UserId";
+                deleteTeamUsersCommand.Parameters.AddWithValue("@UserId", userId);
+                deleteTeamUsersCommand.ExecuteNonQuery();
+
+                // Удаляем пользователя
+                var deleteUserCommand = connection.CreateCommand();
+                deleteUserCommand.CommandText = "DELETE FROM Users WHERE Id = @UserId";
+                deleteUserCommand.Parameters.AddWithValue("@UserId", userId);
+                deleteUserCommand.ExecuteNonQuery();
+            }
+        }
+
+        public void UpdateUser(User user)
+        {
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = @"
+            UPDATE Users 
+            SET FullName = @FullName, 
+                Email = @Email, 
+                Username = @Username, 
+                RoleId = @RoleId, 
+                TeamId = @TeamId 
+            WHERE Id = @Id";
+                command.Parameters.AddWithValue("@FullName", user.FullName);
+                command.Parameters.AddWithValue("@Email", user.Email);
+                command.Parameters.AddWithValue("@Username", user.Username);
+                command.Parameters.AddWithValue("@RoleId", user.RoleId);
+                command.Parameters.AddWithValue("@TeamId", user.TeamId == 0 ? (object)DBNull.Value : user.TeamId);
+                command.Parameters.AddWithValue("@Id", user.Id);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public User GetCurrentUser()
+        {
+            User user = null;
+            using (var connection = new SqliteConnection(_connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = $"SELECT * from Users WHERE Username=@Username";
+                command.Parameters.AddWithValue("@Username", Username);
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            
+                            user = new User
+                            {
+                                Id = reader.GetInt32(0),
+                                FullName = reader.GetString(1),
+                                Email = reader.GetString(2),
+                                Username = reader.GetString(3),
+                                Password = reader.GetString(4),
+                                RoleId = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                                TeamId = reader.IsDBNull(6) ? 0 : reader.GetInt32(6)
+                            };
+                        }
+                        
+                    }
+                }
+            }
+            return user;
         }
     }
 }

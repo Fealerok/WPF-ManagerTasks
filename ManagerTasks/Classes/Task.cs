@@ -12,11 +12,13 @@ namespace ManagerTasks.Classes
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
-        public int StatusId { get; set; } // Ссылка на статус
-        public Status Status { get; set; } // Навигационное свойство
+        public int StatusId { get; set; }
+        public Status Status { get; set; }
         public int AssignedUserId { get; set; }
         public User AssignedUser { get; set; }
         public int ProjectId { get; set; }
         public Project Project { get; set; }
+        public int TeamId { get; set; } // Новое свойство
+        public Team Team { get; set; } // Новое свойство
     }
 }
