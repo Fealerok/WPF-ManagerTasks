@@ -3,25 +3,29 @@ using System.Windows;
 
 namespace ManagerTasks.Windows
 {
-    public partial class EditProjectWindow : Window
+    public partial class EditUserWindow : Window
     {
         private Database _database;
-        private Classes.Project _project;
+        private User _user;
 
-        public EditProjectWindow(Classes.Project project)
+        public EditUserWindow(User user)
         {
             InitializeComponent();
-            _database = Database.GetInstance();
-            _project = project;
+            _database = Database.GetInstance(); // Инициализация базы данных
+            _user = user;
 
-            // Привязка данных проекта к элементам управления
-            DataContext = _project;
+            // Привязка данных пользователя к элементам управления
+            DataContext = _user;
+
+            // Загрузка ролей и команд для ComboBox
+            RoleComboBox.ItemsSource = _database.GetRoles();
+            TeamComboBox.ItemsSource = _database.GetTeams();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             // Сохранение изменений в базе данных
-            _database.UpdateProject(_project);
+            _database.UpdateUser(_user);
             DialogResult = true; // Закрыть окно с результатом "ОК"
             Close();
         }

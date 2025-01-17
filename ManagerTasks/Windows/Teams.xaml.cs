@@ -10,7 +10,7 @@ namespace ManagerTasks.Windows
         public Teams()
         {
             InitializeComponent();
-            _database = new Database(); // Инициализация базы данных
+            _database = Database.GetInstance();
             LoadTeams(); // Загрузка команд при открытии окна
         }
 

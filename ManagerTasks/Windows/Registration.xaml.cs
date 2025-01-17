@@ -25,7 +25,7 @@ namespace ManagerTasks.Windows
         public Registration()
         {
             InitializeComponent();
-            _database = new Database();
+            _database = Database.GetInstance();
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)

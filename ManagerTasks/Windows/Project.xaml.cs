@@ -11,7 +11,7 @@ namespace ManagerTasks.Windows
         public Project()
         {
             InitializeComponent();
-            _database = new Database(); // Инициализация базы данных
+            _database = Database.GetInstance();
             LoadProjects(); // Загрузка проектов при открытии окна
         }
 
