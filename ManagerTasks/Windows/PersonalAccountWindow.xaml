@@ -3,36 +3,46 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ManagerTasks.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Личный кабинет" Height="400" Width="600">
-    <Grid Margin="10">
+        Title="Личный кабинет" Height="500" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFF0F0F0">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <!-- Информация о пользователе -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-            <Label Content="Логин:" FontWeight="Bold" Margin="0,0,5,0"/>
-            <Label x:Name="UsernameLabel" Content="{Binding Username}"/>
-            <Label Content="Email:" FontWeight="Bold" Margin="10,0,5,0"/>
-            <Label x:Name="EmailLabel" Content="{Binding Email}"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <TextBlock Text="Логин:" FontWeight="Bold" Foreground="#FF333333" FontSize="16" Margin="0,0,5,0"/>
+            <TextBlock x:Name="UsernameLabel" Text="{Binding Username}" Foreground="#FF333333" FontSize="16" Margin="0,0,10,0"/>
+            <TextBlock Text="Почта:" FontWeight="Bold" Foreground="#FF333333" FontSize="16" Margin="10,0,5,0"/>
+            <TextBlock x:Name="EmailLabel" Text="{Binding Email}" Foreground="#FF333333" FontSize="16"/>
         </StackPanel>
-
-        <Button Grid.Row="1" Height="20" Content="Восстановить пароль" HorizontalContentAlignment="Center" Width="130" HorizontalAlignment="Left" Click="Button_Click"></Button>
-        <!-- Список задач -->
-        <Label Content="Мои задачи:" Grid.Row="2" FontWeight="Bold" Margin="0,10,0,5"/>
-        <DataGrid x:Name="TasksGrid" Grid.Row="4" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="True">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10">
+            <Button Style="{StaticResource RoundedButtonStyle}" Click="RecoveryButton_Click" Margin="5" Width="185">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Key" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Восстановить пароль" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button Style="{StaticResource RoundedButtonStyle}" Click="BackButton_Click" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ArrowLeft" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Назад" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <TextBlock Grid.Row="2" Text="Мои задачи:" FontWeight="Bold" Foreground="#FF333333" FontSize="16" Margin="10,10,10,5"/>
+        <DataGrid x:Name="TasksGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="2" Margin="10,40,10,10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Title" Binding="{Binding Title}" CanUserSort="True"/>
-                <DataGridTextColumn Header="Description" Binding="{Binding Description}" CanUserSort="True"/>
-                <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat={}{0:yyyy-MM-dd}}" CanUserSort="True"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding Status.Name}" CanUserSort="True"/>
-                <DataGridTextColumn Header="Project" Binding="{Binding Project.Name}" CanUserSort="True"/>
-                <DataGridTextColumn Header="Team" Binding="{Binding Team.Name}" CanUserSort="True"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Title}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Срок выполнения" Binding="{Binding DueDate, StringFormat={}{0:yyyy-MM-dd}}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding Status.Name}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Проект" Binding="{Binding Project.Name}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Команда" Binding="{Binding Team.Name}" Foreground="#FF333333"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

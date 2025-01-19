@@ -15,9 +15,7 @@ using ManagerTasks.Classes;
 
 namespace ManagerTasks.Windows
 {
-    /// <summary>
-    /// Логика взаимодействия для EditTaskWindow.xaml
-    /// </summary>
+
     public partial class EditTaskWindow : Window
     {
         private Database _database;
@@ -26,13 +24,13 @@ namespace ManagerTasks.Windows
         public EditTaskWindow(Classes.Task task)
         {
             InitializeComponent();
-            _database = Database.GetInstance(); // Инициализация базы данных
+            _database = Database.GetInstance(); 
             _task = task;
 
-            // Привязка данных задачи к элементам управления
+
             DataContext = _task;
 
-            // Загрузка данных для ComboBox
+
             LoadStatuses();
             LoadUsers();
             LoadProjects();
@@ -61,15 +59,15 @@ namespace ManagerTasks.Windows
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Сохранение изменений в базе данных
+
             _database.UpdateTask(_task);
-            DialogResult = true; // Закрыть окно с результатом "ОК"
+            DialogResult = true; 
             Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false; // Закрыть окно с результатом "Отмена"
+            DialogResult = false; 
             Close();
         }
     }

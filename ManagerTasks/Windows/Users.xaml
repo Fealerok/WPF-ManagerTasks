@@ -3,26 +3,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ManagerTasks.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Users" Height="450" Width="800">
+        Title="Пользователи" Height="472" Width="863"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFF0F0F0">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Content="Редактировать" Margin="10" Click="EditUserButton_Click"/>
-            <Button Content="Удалить" Margin="10" Click="DeleteUserButton_Click"/>
-            <Button Content="Вернуться к задачам" Margin="10" Click="BackToTasksButton_Click"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10">
+            <Button x:Name="EditUserButton" Style="{StaticResource RoundedButtonStyle}" Click="EditUserButton_Click" Margin="5" Width="139">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Pencil" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Редактировать" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="DeleteUserButton" Style="{StaticResource RoundedButtonStyle}" Click="DeleteUserButton_Click" Margin="5" Width="101">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Delete" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Удалить" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="BackToTasksButton" Style="{StaticResource RoundedButtonStyle}" Click="BackToTasksButton_Click" Margin="5" Width="152">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ArrowLeft" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Назад к задачам" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
-        <DataGrid x:Name="UsersGrid" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1">
+        <DataGrid x:Name="UsersGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="1" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Full Name" Binding="{Binding FullName}"/>
-                <DataGridTextColumn Header="Email" Binding="{Binding Email}"/>
-                <DataGridTextColumn Header="Username" Binding="{Binding Username}"/>
-                <DataGridTextColumn Header="Role" Binding="{Binding Role.Name}"/>
-                <DataGridTextColumn Header="Team" Binding="{Binding Team.Name}"/>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Почта" Binding="{Binding Email}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Логин" Binding="{Binding Username}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Роль" Binding="{Binding Role.Name}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Команда" Binding="{Binding Team.Name}" Foreground="#FF333333"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

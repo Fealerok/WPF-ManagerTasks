@@ -11,16 +11,16 @@ namespace ManagerTasks.Windows
         {
             InitializeComponent();
             _database = Database.GetInstance();
-            LoadTeams(); // Загрузка команд при открытии окна
+            LoadTeams(); 
         }
 
-        // Загрузка команд из базы данных
+        
         private void LoadTeams()
         {
             TeamsGrid.ItemsSource = _database.GetTeams();
         }
 
-        // Обработчик кнопки "Add Team"
+        
         private void AddTeamButton_Click(object sender, RoutedEventArgs e)
         {
             var team = new Team
@@ -29,20 +29,20 @@ namespace ManagerTasks.Windows
             };
 
             _database.AddTeam(team);
-            LoadTeams(); // Обновляем список команд
+            LoadTeams(); 
         }
 
-        // Обработчик кнопки "Edit Team"
+        
         private void EditTeamButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedTeam = TeamsGrid.SelectedItem as Team;
             if (selectedTeam != null)
             {
-                // Открываем окно редактирования команды
+               
                 var editTeamWindow = new EditTeamWindow(selectedTeam);
                 if (editTeamWindow.ShowDialog() == true)
                 {
-                    // Если пользователь нажал "Save", обновляем список команд
+                    
                     LoadTeams();
                 }
             }
@@ -52,15 +52,15 @@ namespace ManagerTasks.Windows
             }
         }
 
-        // Обработчик кнопки "Delete Team"
+
         private void DeleteTeamButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedTeam = TeamsGrid.SelectedItem as Team;
             if (selectedTeam != null)
             {
-                // Удаляем команду из базы данных
+                
                 _database.DeleteTeam(selectedTeam.Id);
-                LoadTeams(); // Обновляем список команд
+                LoadTeams(); 
             }
             else
             {
@@ -68,13 +68,13 @@ namespace ManagerTasks.Windows
             }
         }
 
-        // Обработчик кнопки "Back to Tasks"
+  
         private void BackToTasksButton_Click(object sender, RoutedEventArgs e)
         {
-            // Открываем окно Tasks
+
             var tasksWindow = new Tasks();
-            tasksWindow.Show(); // Показываем окно Tasks
-            this.Close(); // Закрываем текущее окно Teams
+            tasksWindow.Show(); 
+            this.Close(); 
         }
     }
 }
