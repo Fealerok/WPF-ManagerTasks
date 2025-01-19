@@ -101,6 +101,7 @@ namespace ManagerTasks.Classes
 
                 INSERT OR IGNORE INTO Roles (Id, Name) VALUES (1, 'Администратор');
                 INSERT OR IGNORE INTO Roles (Id, Name) VALUES (2, 'Пользователь');
+                INSERT OR IGNORE INTO Users (FullName, Email, Username, Password, RoleId) VALUES ('Иванов Иван Иванович', 'admin@mail.ru', 'admin', 'admin', 1);
             ";
                 command.ExecuteNonQuery();
             }

@@ -92,7 +92,7 @@
                 </StackPanel>
             </Button>
         </StackPanel>
-        <DataGrid x:Name="TasksGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="3" Margin="10">
+        <DataGrid x:Name="TasksGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="3" Margin="10" SelectionChanged="TasksGrid_SelectionChanged" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Название" Binding="{Binding Title}" Foreground="#FF333333"/>
                 <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Foreground="#FF333333"/>

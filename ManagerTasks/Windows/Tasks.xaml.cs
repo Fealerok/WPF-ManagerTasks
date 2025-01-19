@@ -274,6 +274,9 @@ namespace ManagerTasks.Windows
             this.Close(); 
         }
 
+        private void TasksGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
+        }
     }
 }
