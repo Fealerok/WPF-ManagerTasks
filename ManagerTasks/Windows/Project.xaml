@@ -39,7 +39,7 @@
                 </StackPanel>
             </Button>
         </StackPanel>
-        <DataGrid x:Name="ProjectsGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="1" Margin="10">
+        <DataGrid x:Name="ProjectsGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="1" Margin="10" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Название" Binding="{Binding Name}" Foreground="#FF333333"/>
             </DataGrid.Columns>

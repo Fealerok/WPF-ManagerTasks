@@ -33,7 +33,7 @@
                 </StackPanel>
             </Button>
         </StackPanel>
-        <DataGrid x:Name="UsersGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="1" Margin="10">
+        <DataGrid x:Name="UsersGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="1" Margin="10" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Foreground="#FF333333"/>
                 <DataGridTextColumn Header="Почта" Binding="{Binding Email}" Foreground="#FF333333"/>
