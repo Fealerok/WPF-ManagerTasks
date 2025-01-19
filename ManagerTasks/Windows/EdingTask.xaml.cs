@@ -12,13 +12,13 @@ namespace ManagerTasks.Windows
         public EdingTask(Classes.Task task)
         {
             InitializeComponent();
-            _database = new Database(); // Инициализация базы данных
+            _database = Database.GetInstance(); 
             _task = task;
 
-            // Привязка данных задачи к элементам управления
+
             DataContext = _task;
 
-            // Загрузка данных для ComboBox
+
             LoadStatuses();
             LoadUsers();
             LoadProjects();
@@ -41,15 +41,15 @@ namespace ManagerTasks.Windows
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Сохранение изменений в базе данных
+
             _database.UpdateTask(_task);
-            DialogResult = true; // Закрыть окно с результатом "ОК"
+            DialogResult = true; 
             Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false; // Закрыть окно с результатом "Отмена"
+            DialogResult = false; 
             Close();
         }
     }

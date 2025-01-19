@@ -18,7 +18,7 @@ namespace ManagerTasks.Classes
         public User AssignedUser { get; set; }
         public int ProjectId { get; set; }
         public Project Project { get; set; }
-        public int TeamId { get; set; } // Новое свойство
-        public Team Team { get; set; } // Новое свойство
+        public int TeamId { get; set; } 
+        public Team Team { get; set; } 
     }
 }

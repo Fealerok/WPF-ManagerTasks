@@ -15,9 +15,7 @@ using System.Windows.Shapes;
 
 namespace ManagerTasks.Windows
 {
-    /// <summary>
-    /// Логика взаимодействия для Authorization.xaml
-    /// </summary>
+
     public partial class Authorization : Window
     {
 

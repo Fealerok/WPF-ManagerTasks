@@ -15,7 +15,7 @@ namespace ManagerTasks.Classes
         public string Password { get; set; }
         public int RoleId { get; set; }
         public Role Role { get; set; }
-        public int TeamId { get; set; } // Возвращаем TeamId
-        public Team Team { get; set; } // Связь с командой
+        public int TeamId { get; set; } 
+        public Team Team { get; set; } 
     }
 }

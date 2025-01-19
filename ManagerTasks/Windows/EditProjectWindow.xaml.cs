@@ -14,21 +14,21 @@ namespace ManagerTasks.Windows
             _database = Database.GetInstance();
             _project = project;
 
-            // Привязка данных проекта к элементам управления
+
             DataContext = _project;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Сохранение изменений в базе данных
+
             _database.UpdateProject(_project);
-            DialogResult = true; // Закрыть окно с результатом "ОК"
+            DialogResult = true; 
             Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false; // Закрыть окно с результатом "Отмена"
+            DialogResult = false; 
             Close();
         }
     }

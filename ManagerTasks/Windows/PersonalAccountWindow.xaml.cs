@@ -16,35 +16,45 @@ namespace ManagerTasks.Windows
             InitializeComponent();
             _database = Database.GetInstance();
 
-            // Получаем текущего пользователя
+
             _currentUser = _database.GetCurrentUser();
 
-            // Отображаем информацию о пользователе
-            UsernameLabel.Content = _currentUser.Username;
-            EmailLabel.Content = _currentUser.Email;
 
-            // Загружаем задачи, назначенные на текущего пользователя
+            UsernameLabel.Text = _currentUser.Username;
+            EmailLabel.Text = _currentUser.Email;
+
+
             LoadUserTasks();
         }
 
         private void LoadUserTasks()
         {
-            // Получаем все задачи из базы данных
+
             var allTasks = _database.GetTasks();
 
 
-            // Фильтруем задачи, назначенные на текущего пользователя
             _userTasks = allTasks.Where(t => t.AssignedUserId == _currentUser.Id).ToList();
 
-            // Отображаем задачи в DataGrid
+
             TasksGrid.ItemsSource = _userTasks;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        private void RecoveryButton_Click(object sender, RoutedEventArgs e)
         {
+
             Recovery recoveryWindow = new Recovery();
             recoveryWindow.Show();
             this.Close();
+        }
+
+ 
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            Tasks tasksWindow = new Tasks();
+            tasksWindow.Show();
+            this.Close(); 
         }
     }
 }

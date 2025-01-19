@@ -3,24 +3,46 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ManagerTasks.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Teams" Height="450" Width="800">
+        Title="Команды" Height="500" Width="872"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFF0F0F0">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Content="Add Team" Margin="10" Click="AddTeamButton_Click"/>
-            <Button Content="Edit Team" Margin="10" Click="EditTeamButton_Click"/>
-            <Button Content="Delete Team" Margin="10" Click="DeleteTeamButton_Click"/>
-            <Button Content="Back to Tasks" Margin="10" Click="BackToTasksButton_Click"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10">
+            <Button x:Name="AddTeamButton" Style="{StaticResource RoundedButtonStyle}" Click="AddTeamButton_Click" Margin="5" Width="171">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Plus" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Добавить команду" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="EditTeamButton" Style="{StaticResource RoundedButtonStyle}" Click="EditTeamButton_Click" Margin="5" Width="200">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Pencil" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Редактировать команду" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="DeleteTeamButton" Style="{StaticResource RoundedButtonStyle}" Click="DeleteTeamButton_Click" Margin="5" Width="156">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Delete" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Удалить команду" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="BackToTasksButton" Style="{StaticResource RoundedButtonStyle}" Click="BackToTasksButton_Click" Margin="5" Width="162">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ArrowLeft" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Назад к задачам" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
-        <DataGrid x:Name="TeamsGrid" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1">
+        <DataGrid x:Name="TeamsGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="1" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Members" Binding="{Binding Users.Count}"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Участники" Binding="{Binding Users.Count}" Foreground="#FF333333"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

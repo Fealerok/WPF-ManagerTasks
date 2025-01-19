@@ -15,9 +15,7 @@ using System.Windows.Shapes;
 
 namespace ManagerTasks.Windows
 {
-    /// <summary>
-    /// Логика взаимодействия для Recovery.xaml
-    /// </summary>
+
     public partial class Recovery : Window
     {
         private Database _database;

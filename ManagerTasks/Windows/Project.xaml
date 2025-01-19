@@ -3,23 +3,45 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ManagerTasks.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Projects" Height="450" Width="800">
+        Title="Проекты" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFF0F0F0">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Content="Add Project" Margin="10" Click="AddProjectButton_Click"/>
-            <Button Content="Edit Project" Margin="10" Click="EditProjectButton_Click"/>
-            <Button Content="Delete Project" Margin="10" Click="DeleteProjectButton_Click"/>
-            <Button Content="Back to Tasks" Margin="10" Click="BackToTasksButton_Click"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10">
+            <Button x:Name="AddProjectButton" Style="{StaticResource RoundedButtonStyle}" Click="AddProjectButton_Click" Margin="5" Width="165">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Plus" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Добавить проект" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="EditProjectButton" Style="{StaticResource RoundedButtonStyle}" Click="EditProjectButton_Click" Margin="5" Width="190">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Pencil" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Редактировать проект" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="DeleteProjectButton" Style="{StaticResource RoundedButtonStyle}" Click="DeleteProjectButton_Click" Margin="5" Width="146">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Delete" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Удалить проект" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="BackToTasksButton" Style="{StaticResource RoundedButtonStyle}" Click="BackToTasksButton_Click" Margin="5" Width="155">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ArrowLeft" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Назад к задачам" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
-        <DataGrid x:Name="ProjectsGrid" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1">
+        <DataGrid x:Name="ProjectsGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="1" Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Foreground="#FF333333"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

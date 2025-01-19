@@ -11,8 +11,8 @@ namespace ManagerTasks.Windows
     {
         private Database _database;
         private string _UserRole;
-        private List<Classes.Task> _allTasks; // Список всех задач
-        private List<Classes.Task> _filteredTasks; // Список отфильтрованных задач
+        private List<Classes.Task> _allTasks; 
+        private List<Classes.Task> _filteredTasks; 
 
         public Tasks()
         {
@@ -23,41 +23,41 @@ namespace ManagerTasks.Windows
             if (_UserRole == "Администратор") UsersButton.Visibility = Visibility.Visible;
             else UsersButton.Visibility = Visibility.Hidden;
 
-            LoadTasks(); // Загрузка задач при открытии окна
-            LoadFilters(); // Загрузка данных для фильтров
+            LoadTasks(); 
+            LoadFilters(); 
 
-            // Подписываемся на событие изменения выбора в ComboBox
+
             FilterComboBox.SelectionChanged += FilterComboBox_SelectionChanged;
         }
 
         private void LoadTasks()
         {
-            // Получаем задачи из базы данных
+
             _allTasks = _database.GetTasks();
-            _filteredTasks = _allTasks; // Изначально отображаем все задачи
+            _filteredTasks = _allTasks; 
             TasksGrid.ItemsSource = _filteredTasks;
         }
 
         private void LoadFilters()
         {
-            // Загружаем статусы для фильтра
+
             var statuses = _database.GetStatuses();
             var users = _database.GetUsers();
             var projects = _database.GetProjects();
 
-            // Устанавливаем данные для ComboBox
+
             FilterValueComboBox.ItemsSource = statuses;
         }
 
         private void FilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Обрабатываем изменение выбора в ComboBox
+
             var selectedFilter = (FilterComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
 
             switch (selectedFilter)
             {
                 case "По статусу":
-                    FilterValueComboBox.DisplayMemberPath = "Name"; // Для статусов
+                    FilterValueComboBox.DisplayMemberPath = "Name"; 
                     FilterValueComboBox.ItemsSource = _database.GetStatuses();
                     FilterValueComboBox.Visibility = Visibility.Visible;
                     FilterDatePicker.Visibility = Visibility.Collapsed;
@@ -69,14 +69,14 @@ namespace ManagerTasks.Windows
                     break;
 
                 case "По исполнителю":
-                    FilterValueComboBox.DisplayMemberPath = "Username"; // Для статусов
+                    FilterValueComboBox.DisplayMemberPath = "Username"; 
                     FilterValueComboBox.ItemsSource = _database.GetUsers();
                     FilterValueComboBox.Visibility = Visibility.Visible;
                     FilterDatePicker.Visibility = Visibility.Collapsed;
                     break;
 
                 case "По проекту":
-                    FilterValueComboBox.DisplayMemberPath = "Name"; // Для статусов
+                    FilterValueComboBox.DisplayMemberPath = "Name"; 
                     FilterValueComboBox.ItemsSource = _database.GetProjects();
                     FilterValueComboBox.Visibility = Visibility.Visible;
                     FilterDatePicker.Visibility = Visibility.Collapsed;
@@ -152,7 +152,7 @@ namespace ManagerTasks.Windows
 
         private void ResetFilterButton_Click(object sender, RoutedEventArgs e)
         {
-            // Сбрасываем фильтры и отображаем все задачи
+
             TasksGrid.ItemsSource = _allTasks;
             FilterComboBox.SelectedIndex = -1;
             FilterValueComboBox.SelectedIndex = -1;
@@ -161,13 +161,13 @@ namespace ManagerTasks.Windows
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Выполняем поиск при изменении текста в поле поиска
+
             ApplySearch();
         }
 
         private void ClearSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            // Очищаем поле поиска и отображаем все задачи
+
             SearchTextBox.Text = string.Empty;
             ApplySearch();
         }
@@ -178,12 +178,12 @@ namespace ManagerTasks.Windows
 
             if (string.IsNullOrEmpty(searchText))
             {
-                // Если поле поиска пустое, отображаем отфильтрованные задачи
+
                 TasksGrid.ItemsSource = _filteredTasks;
             }
             else
             {
-                // Фильтруем задачи по ключевым словам с проверкой на null
+
                 var searchedTasks = _filteredTasks
                     .Where(t => (t.Title?.ToLower().Contains(searchText) ?? false) ||
                                 (t.Description?.ToLower().Contains(searchText) ?? false) ||
@@ -198,7 +198,7 @@ namespace ManagerTasks.Windows
         }
 
 
-        // Остальные методы остаются без изменений
+
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {
             var task = new Classes.Task
@@ -206,13 +206,13 @@ namespace ManagerTasks.Windows
                 Title = "New Task",
                 Description = "Description",
                 DueDate = DateTime.Now,
-                StatusId = 1, // Статус "В работе"
-                AssignedUserId = _database.GetIdLoggedUser(_database.Username), // Пример пользователя
-                ProjectId = 0 // Пример проекта
+                StatusId = 1, 
+                AssignedUserId = _database.GetIdLoggedUser(_database.Username), 
+                ProjectId = 0 
             };
 
             _database.AddTask(task);
-            LoadTasks(); // Обновляем список задач
+            LoadTasks(); 
         }
 
         private void EditTaskButton_Click(object sender, RoutedEventArgs e)
@@ -220,11 +220,11 @@ namespace ManagerTasks.Windows
             var selectedTask = TasksGrid.SelectedItem as Classes.Task;
             if (selectedTask != null)
             {
-                // Открываем окно редактирования задачи
+
                 var edingTaskWindow = new EditTaskWindow(selectedTask);
                 if (edingTaskWindow.ShowDialog() == true)
                 {
-                    // Если пользователь нажал "Save", обновляем список задач
+
                     LoadTasks();
                 }
             }
@@ -240,38 +240,38 @@ namespace ManagerTasks.Windows
             if (selectedTask != null)
             {
                 _database.DeleteTask(selectedTask.Id);
-                LoadTasks(); // Обновляем список задач
+                LoadTasks(); 
             }
         }
 
         private void ProjectButton_Click(object sender, RoutedEventArgs e)
         {
             var projectWindow = new Project();
-            projectWindow.Show(); // Показываем окно Tasks
-            this.Close(); // Закрываем текущее окно Project
+            projectWindow.Show(); 
+            this.Close(); 
         }
 
         private void TeamsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Открываем окно Teams
+  
             var teamsWindow = new Teams();
-            teamsWindow.Show(); // Показываем окно Teams
-            this.Close(); // Закрываем текущее окно Tasks
+            teamsWindow.Show(); 
+            this.Close(); 
         }
 
         private void UsersButton_Click(object sender, RoutedEventArgs e)
         {
             var usersWindow = new Users();
-            usersWindow.Show(); // Показываем окно Teams
-            this.Close(); // Закрываем текущее окно Tasks
+            usersWindow.Show(); 
+            this.Close(); 
         }
 
         private void PersonalAccountButton_Click(object sender, RoutedEventArgs e)
         {
-            // Открываем окно "Личный кабинет"
+
             var personalAccountWindow = new PersonalAccountWindow();
-            personalAccountWindow.Show(); // Показываем окно
-            this.Close(); // Закрываем текущее окно Tasks
+            personalAccountWindow.Show(); 
+            this.Close(); 
         }
 
 

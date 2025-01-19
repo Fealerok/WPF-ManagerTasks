@@ -216,7 +216,7 @@ namespace ManagerTasks.Classes
                             Name = reader.GetString(1)
                         };
 
-                        // Загрузка пользователей команды
+
                         team.Users = GetTeamUsers(team.Id);
                         teams.Add(team);
                     }
@@ -225,20 +225,20 @@ namespace ManagerTasks.Classes
             return teams;
         }
 
-        // Добавление пользователя в команду
+
         public void AddUserToTeam(int teamId, int userId)
         {
             using (var connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
 
-                // Проверяем, существует ли команда
+
                 var checkTeamCommand = connection.CreateCommand();
                 checkTeamCommand.CommandText = "SELECT COUNT(*) FROM Teams WHERE Id = @TeamId";
                 checkTeamCommand.Parameters.AddWithValue("@TeamId", teamId);
                 var teamExists = (long)checkTeamCommand.ExecuteScalar() > 0;
 
-                // Проверяем, существует ли пользователь
+
                 var checkUserCommand = connection.CreateCommand();
                 checkUserCommand.CommandText = "SELECT COUNT(*) FROM Users WHERE Id = @UserId";
                 checkUserCommand.Parameters.AddWithValue("@UserId", userId);
@@ -249,7 +249,7 @@ namespace ManagerTasks.Classes
                     throw new InvalidOperationException("Team or User does not exist.");
                 }
 
-                // Добавляем пользователя в команду
+
                 var command = connection.CreateCommand();
                 command.CommandText = "INSERT INTO TeamUsers (TeamId, UserId) VALUES (@TeamId, @UserId)";
                 command.Parameters.AddWithValue("@TeamId", teamId);
@@ -258,7 +258,7 @@ namespace ManagerTasks.Classes
             }
         }
 
-        // Удаление пользователя из команды
+ 
         public void RemoveUserFromTeam(int teamId, int userId)
         {
             using (var connection = new SqliteConnection(_connectionString))
@@ -272,7 +272,7 @@ namespace ManagerTasks.Classes
             }
         }
 
-        // Получение пользователей команды
+ 
         public List<User> GetTeamUsers(int teamId)
         {
             var users = new List<User>();
@@ -317,7 +317,7 @@ namespace ManagerTasks.Classes
             }
         }
 
-        // Остальные методы для Projects и Tasks остаются без изменений
+
 
         public List<Project> GetProjects()
         {
@@ -519,7 +519,6 @@ namespace ManagerTasks.Classes
             SET Name = @Name
             WHERE Id = @Id";
 
-                // Логирование параметров
                 Console.WriteLine($"Executing SQL: {command.CommandText}");
                 Console.WriteLine($"Parameters: Name={project.Name}, Id={project.Id}");
 
@@ -533,7 +532,7 @@ namespace ManagerTasks.Classes
                 catch (SqliteException ex)
                 {
                     Console.WriteLine($"SQLite Error: {ex.Message}");
-                    throw; // Повторно выбрасываем исключение для дальнейшей диагностики
+                    throw; 
                 }
             }
         }
@@ -563,8 +562,8 @@ namespace ManagerTasks.Classes
                 command.Parameters.AddWithValue("@FullName", user.FullName);
                 command.Parameters.AddWithValue("@Email", user.Email);
                 command.Parameters.AddWithValue("@Username", user.Username);
-                command.Parameters.AddWithValue("@Password", user.Password); // В реальном приложении пароль должен быть хэширован
-                command.Parameters.AddWithValue("@RoleId", 2); // По умолчанию присваиваем роль "Пользователь"
+                command.Parameters.AddWithValue("@Password", user.Password); 
+                command.Parameters.AddWithValue("@RoleId", 2); 
                 command.Parameters.AddWithValue("@TeamId", user.TeamId == 0 ? (object)DBNull.Value : user.TeamId);
                 command.ExecuteNonQuery();
                 return true;
@@ -579,7 +578,7 @@ namespace ManagerTasks.Classes
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT Users.*, Roles.Name as RoleName, Teams.Name as TeamName FROM Users JOIN Roles ON Users.RoleId = Roles.Id LEFT JOIN Teams ON Users.TeamId = Teams.Id WHERE Username = @Username AND Password = @Password";
                 command.Parameters.AddWithValue("@Username", username);
-                command.Parameters.AddWithValue("@Password", password); // В реальном приложении пароль должен быть хэширован
+                command.Parameters.AddWithValue("@Password", password); 
                 using (var reader = command.ExecuteReader())
                 {
                     if (reader.Read())
@@ -611,7 +610,7 @@ namespace ManagerTasks.Classes
                 var command = connection.CreateCommand();
                 command.CommandText = $"SELECT username FROM Users WHERE username=@Username AND email=@Email";
                 command.Parameters.AddWithValue("@Username", login);
-                command.Parameters.AddWithValue("@Email", email); // В реальном приложении пароль должен быть хэширован
+                command.Parameters.AddWithValue("@Email", email); 
                 using (var reader = command.ExecuteReader())
                 {
                     if (reader.HasRows)
