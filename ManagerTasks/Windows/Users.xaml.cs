@@ -50,7 +50,7 @@ namespace ManagerTasks.Windows
             }
             else
             {
-                MessageBox.Show("Please select a user to edit.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Выберите юзера.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -66,7 +66,7 @@ namespace ManagerTasks.Windows
             }
             else
             {
-                MessageBox.Show("Please select a user to delete.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Выберите юзера.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

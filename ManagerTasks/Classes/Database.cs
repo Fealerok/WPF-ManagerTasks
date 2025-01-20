@@ -101,8 +101,9 @@ namespace ManagerTasks.Classes
 
                 INSERT OR IGNORE INTO Roles (Id, Name) VALUES (1, 'Администратор');
                 INSERT OR IGNORE INTO Roles (Id, Name) VALUES (2, 'Пользователь');
-                INSERT OR IGNORE INTO Users (FullName, Email, Username, Password, RoleId) VALUES ('Иванов Иван Иванович', 'admin@mail.ru', 'admin', 'admin', 1);
+                
             ";
+                //INSERT OR IGNORE INTO Users (FullName, Email, Username, Password, RoleId) VALUES ('Иванов Иван Иванович', 'admin@mail.ru', 'admin', 'admin', 1);
                 command.ExecuteNonQuery();
             }
         }
@@ -416,7 +417,7 @@ namespace ManagerTasks.Classes
                 connection.Open();
                 var command = connection.CreateCommand();
                 command.CommandText = @"
-            SELECT Tasks.*, Statuses.Name as StatusName, Users.Username, Projects.Name as ProjectName, Teams.Name as TeamName 
+            SELECT Tasks.*, Statuses.Name as StatusName, Users.Username, Projects.Name as ProjectName, Teams.Name as TeamName, Users.FullName 
             FROM Tasks 
             LEFT JOIN Statuses ON Tasks.StatusId = Statuses.Id 
             LEFT JOIN Users ON Tasks.AssignedUserId = Users.Id 
@@ -435,7 +436,7 @@ namespace ManagerTasks.Classes
                             StatusId = reader.GetInt32(4),
                             Status = new Status { Id = reader.GetInt32(4), Name = reader.GetString(8) },
                             AssignedUserId = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
-                            AssignedUser = reader.IsDBNull(5) ? null : new User { Username = reader.GetString(9) },
+                            AssignedUser = reader.IsDBNull(5) ? null : new User { Username = reader.GetString(9), FullName = reader.GetString(12) },
                             ProjectId = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
                             Project = reader.IsDBNull(6) ? null : new Project { Name = reader.GetString(10) },
                             TeamId = reader.IsDBNull(7) ? 0 : reader.GetInt32(7),
@@ -549,8 +550,6 @@ namespace ManagerTasks.Classes
                 command.ExecuteNonQuery();
             }
         }
-
-
 
 
         public bool RegisterUser(User user)

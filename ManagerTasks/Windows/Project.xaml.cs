@@ -26,7 +26,7 @@ namespace ManagerTasks.Windows
         {
             var project = new Classes.Project
             {
-                Name = "New Project",
+                Name = "",
             };
 
             _database.AddProject(project);
@@ -49,7 +49,7 @@ namespace ManagerTasks.Windows
             }
             else
             {
-                MessageBox.Show("Please select a project to edit.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Выберите проект", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -65,7 +65,7 @@ namespace ManagerTasks.Windows
             }
             else
             {
-                MessageBox.Show("Please select a project to delete.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Выберите проект.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

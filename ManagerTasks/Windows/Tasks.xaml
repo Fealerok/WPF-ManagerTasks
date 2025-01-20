@@ -98,7 +98,7 @@
                 <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Foreground="#FF333333"/>
                 <DataGridTextColumn Header="Срок выполнения" Binding="{Binding DueDate, StringFormat={}{0:yyyy-MM-dd}}" Foreground="#FF333333"/>
                 <DataGridTextColumn Header="Статус" Binding="{Binding Status.Name}" Foreground="#FF333333"/>
-                <DataGridTextColumn Header="Исполнитель" Binding="{Binding AssignedUser.Username}" Foreground="#FF333333"/>
+                <DataGridTextColumn Header="Исполнитель" Binding="{Binding AssignedUser.FullName}" Foreground="#FF333333"/>
                 <DataGridTextColumn Header="Проект" Binding="{Binding Project.Name}" Foreground="#FF333333"/>
                 <DataGridTextColumn Header="Команда" Binding="{Binding Team.Name}" Foreground="#FF333333"/>
             </DataGrid.Columns>
