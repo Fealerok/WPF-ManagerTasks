@@ -203,8 +203,8 @@ namespace ManagerTasks.Windows
         {
             var task = new Classes.Task
             {
-                Title = "",
-                Description = "",
+                Title = "New Task",
+                Description = "Description",
                 DueDate = DateTime.Now,
                 StatusId = 1, 
                 AssignedUserId = _database.GetIdLoggedUser(_database.Username), 

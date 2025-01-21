@@ -26,7 +26,7 @@ namespace ManagerTasks.Windows
         {
             var project = new Classes.Project
             {
-                Name = "",
+                Name = "New Project",
             };
 
             _database.AddProject(project);
