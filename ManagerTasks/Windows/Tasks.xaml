@@ -91,6 +91,28 @@
                     <TextBlock Text="Очистить поиск" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
+
+
+
+            <Button Style="{StaticResource RoundedButtonStyle}" Click="ExportTasks_Click" Width="100" Margin="500, 0, 0, 0">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Check" Width="20" Height="20" Margin="0,0,5,0"/>
+                    <TextBlock Text="Экспорт" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+
+            <Button Style="{StaticResource RoundedButtonStyle}" Click="ChooseFile" Width="150" Margin="-380, 0, 0, 0">
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock Text="Выбрать файл" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+
+            <ComboBox x:Name="ExportFormat" Style="{StaticResource CustomComboBoxStyle}" Width="200" Margin="-800, 0, 0, 0">
+                <ComboBoxItem Content="TXT Формат"/>
+                <ComboBoxItem Content="JSON Формат"/>
+
+            </ComboBox>
         </StackPanel>
         <DataGrid x:Name="TasksGrid" Style="{StaticResource CustomDataGridStyle}" Grid.Row="3" Margin="10" SelectionChanged="TasksGrid_SelectionChanged" IsReadOnly="True">
             <DataGrid.Columns>
@@ -105,3 +127,21 @@
         </DataGrid>
     </Grid>
 </Window>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

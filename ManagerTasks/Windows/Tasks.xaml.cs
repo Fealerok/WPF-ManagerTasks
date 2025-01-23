@@ -1,7 +1,9 @@
 ﻿using ManagerTasks.Classes;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,8 +14,8 @@ namespace ManagerTasks.Windows
         private Database _database;
         private string _UserRole;
         private List<Classes.Task> _allTasks; 
-        private List<Classes.Task> _filteredTasks; 
-
+        private List<Classes.Task> _filteredTasks;
+        private string filePath;
         public Tasks()
         {
             InitializeComponent();
@@ -277,6 +279,105 @@ namespace ManagerTasks.Windows
         private void TasksGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void ExportTasks_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedFilter = (ExportFormat.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            if (selectedFilter == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите формат экспорта");
+                return;
+            }
+            else if (filePath == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите файл для экспорта");
+                return;
+            }
+
+            var tasks = TasksGrid.Items;
+            List<Classes.TaskForJSON> tasksList = new List<Classes.TaskForJSON> ();
+            ExportTasksLibrary.ExportTasks exportTasks = new ExportTasksLibrary.ExportTasks();
+
+            foreach (Classes.Task task in tasks)
+            {
+                tasksList.Add(new TaskForJSON()
+                {
+                    Id = task.Id,
+                    Title = task.Title,
+                    Description = task.Description,
+                    DueDate = task.DueDate,
+                    AssignedUser = task.AssignedUser.FullName,
+                    Project = task.Project?.Name,
+                    Team = task.Team?.Name,
+                    Status = task.Status.Name,
+                });
+            }
+
+
+            switch (selectedFilter)
+            {
+                case "TXT Формат":
+                    var lines = new List<string>();
+                    foreach (Classes.Task task in tasks)
+                    {
+                        string line = $"ID: {task.Id}, " +
+                                      $"Title: {task.Title}, " +
+                                      $"Description: {task.Description}, " +
+                                      $"DueDate: {task.DueDate:yyyy-MM-dd}, " +
+                                      $"Status: {task.Status.Name}, " +
+                                      $"AssignedUser: {task.AssignedUser.FullName}, " +
+                                      $"Project: {task.Project?.Name ?? "NULL"}, " +
+                                      $"Team: {task.Team?.Name ?? "NULL"}";
+                        lines.Add(line);
+                    }
+                    if (exportTasks.ExportToTxt(lines, filePath))
+                    {
+                        MessageBox.Show("Задачи сохранены в формате TXT");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Произошла ошибка при сохранении данных в формате TXT");
+                    }
+                    break;
+
+                case "JSON Формат":
+                    // Настройка сериализатора
+                    var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true, // Красивый формат с отступами
+                        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping // Отключаем экранирование
+                    };
+                    // Сериализация в JSON
+                    string jsonString = JsonSerializer.Serialize(tasks, options);
+
+                    if (exportTasks.ExportToJson(jsonString, filePath))
+                    {
+                        MessageBox.Show("Задачи сохранены в формате JSON");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Произошла ошибка при сохранении данных в формате JSON");
+                    }
+                    break;
+            }
+
+
+
+        }
+
+        private void ChooseFile(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            // Настройка диалогового окна
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|JSON files (*.json)|*.json|All files (*.*)|*.*"; // Фильтр файлов
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                filePath = openFileDialog.FileName;
+            }
         }
     }
 }

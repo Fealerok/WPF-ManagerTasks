@@ -17,4 +17,10 @@
     <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="ExportTasksLibrary">
+      <HintPath>..\ExportTasksLibrary\ExportTasksLibrary\bin\Debug\net8.0-windows\ExportTasksLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

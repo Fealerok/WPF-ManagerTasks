@@ -9,7 +9,8 @@
       "ManagerTasks/1.0.0": {
         "dependencies": {
           "MaterialDesignThemes": "5.2.1",
-          "Microsoft.Data.Sqlite": "9.0.0"
+          "Microsoft.Data.Sqlite": "9.0.0",
+          "ExportTasksLibrary": "1.0.0.0"
         },
         "runtime": {
           "ManagerTasks.dll": {}
@@ -204,7 +205,15 @@
           }
         }
       },
-      "System.Memory/4.5.3": {}
+      "System.Memory/4.5.3": {},
+      "ExportTasksLibrary/1.0.0.0": {
+        "runtime": {
+          "ExportTasksLibrary.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
     }
   },
   "libraries": {
@@ -282,6 +291,11 @@
       "sha512": "sha512-3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
       "path": "system.memory/4.5.3",
       "hashPath": "system.memory.4.5.3.nupkg.sha512"
+    },
+    "ExportTasksLibrary/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }
