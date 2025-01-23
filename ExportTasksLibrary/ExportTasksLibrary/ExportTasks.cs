@@ -30,7 +30,6 @@ namespace ExportTasksLibrary
                 foreach (string line in lines) 
                 {
                     List<string> lineData = line.Split(", ").ToList();
-                    MessageBox.Show(lineData[4]);
                     tasksList.Add(new TaskForJSON()
                     {
                          Id = int.Parse(lineData[0].Split(": ")[1]),
