@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -296,9 +297,48 @@ namespace ManagerTasks.Windows
                 return;
             }
 
-            var tasks = TasksGrid.Items;
-            List<Classes.TaskForJSON> tasksList = new List<Classes.TaskForJSON> ();
+
+
             ExportTasksLibrary.ExportTasks exportTasks = new ExportTasksLibrary.ExportTasks();
+
+            switch (selectedFilter)
+            {
+                case "TXT Формат":
+                    
+                    if (exportTasks.ExportToTxt(GetTasksInTXT(), filePath))
+                    {
+                        MessageBox.Show("Задачи сохранены в формате TXT");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Произошла ошибка при сохранении данных в формате TXT");
+                    }
+                    break;
+
+                case "JSON Формат":
+                   
+
+                    if (exportTasks.ExportToJson(GetTasksInTXT(), filePath))
+                    {
+                        MessageBox.Show("Задачи сохранены в формате JSON");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Произошла ошибка при сохранении данных в формате JSON");
+                    }
+                    break;
+            }
+
+
+
+        }
+
+        private List<string> GetTasksInTXT() 
+        {
+
+            var tasks = TasksGrid.Items;
+            List<Classes.TaskForJSON> tasksList = new List<Classes.TaskForJSON>();
+
 
             foreach (Classes.Task task in tasks)
             {
@@ -315,56 +355,22 @@ namespace ManagerTasks.Windows
                 });
             }
 
+            List<string> lines = new List<string>();
 
-            switch (selectedFilter)
+            foreach (Classes.Task task in tasks)
             {
-                case "TXT Формат":
-                    var lines = new List<string>();
-                    foreach (Classes.Task task in tasks)
-                    {
-                        string line = $"ID: {task.Id}, " +
-                                      $"Title: {task.Title}, " +
-                                      $"Description: {task.Description}, " +
-                                      $"DueDate: {task.DueDate:yyyy-MM-dd}, " +
-                                      $"Status: {task.Status.Name}, " +
-                                      $"AssignedUser: {task.AssignedUser.FullName}, " +
-                                      $"Project: {task.Project?.Name ?? "NULL"}, " +
-                                      $"Team: {task.Team?.Name ?? "NULL"}";
-                        lines.Add(line);
-                    }
-                    if (exportTasks.ExportToTxt(lines, filePath))
-                    {
-                        MessageBox.Show("Задачи сохранены в формате TXT");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Произошла ошибка при сохранении данных в формате TXT");
-                    }
-                    break;
-
-                case "JSON Формат":
-                    // Настройка сериализатора
-                    var options = new JsonSerializerOptions
-                    {
-                        WriteIndented = true, // Красивый формат с отступами
-                        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping // Отключаем экранирование
-                    };
-                    // Сериализация в JSON
-                    string jsonString = JsonSerializer.Serialize(tasks, options);
-
-                    if (exportTasks.ExportToJson(jsonString, filePath))
-                    {
-                        MessageBox.Show("Задачи сохранены в формате JSON");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Произошла ошибка при сохранении данных в формате JSON");
-                    }
-                    break;
+                string line = $"ID: {task.Id}, " +
+                              $"Title: {task.Title}, " +
+                              $"Description: {task.Description}, " +
+                              $"DueDate: {task.DueDate:yyyy-MM-dd}, " +
+                              $"Status: {task.Status.Name}, " +
+                              $"AssignedUser: {task.AssignedUser.FullName}, " +
+                              $"Project: {task.Project?.Name ?? "NULL"}, " +
+                              $"Team: {task.Team?.Name ?? "NULL"}";
+                lines.Add(line);
             }
 
-
-
+            return lines;
         }
 
         private void ChooseFile(object sender, RoutedEventArgs e)
